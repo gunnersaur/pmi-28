@@ -119,7 +119,7 @@ def normalizar_logradouro(valor):
     ).strip()
 
     valor = re.sub(
-        r"^(RUA|R\.|AVENIDA|AV\.|ALAMEDA|AL\.|TRAVESSA|TV\.|RODOVIA|ROD\.)\s+",
+        r"^(R\.?|RUA|AVENIDA|AV\.?|ALAMEDA|AL\.?|TRAVESSA|TV\.?|RODOVIA|ROD\.?)\s+",
         "",
         valor
     )
@@ -408,7 +408,7 @@ def extrair_endereco_cadastro(
     # ========================================================
 
     match = re.search(
-        r"Logradouro\s*:\s*([^\n\r|]+)",
+        r"Logradouro[ \t]*:[ \t]*(.*?)(?=[ \t]+(?:N[úu]mero|Complemento|Bairro|CEP)[ \t]*:|[\n\r|]|$)",
         bloco,
         flags=re.IGNORECASE
     )
@@ -422,7 +422,7 @@ def extrair_endereco_cadastro(
     # O valor do número pode estar na mesma linha de Complemento,
     # Bairro ou CEP. Interrompe a captura antes do próximo rótulo.
     match = re.search(
-        r"N[úu]mero\s*:\s*(.*?)(?=\s+(?:Complemento|Bairro|CEP|Logradouro)\s*:|[\n\r|]|$)",
+        r"N[úu]mero[ \t]*:[ \t]*(.*?)(?=[ \t]+(?:Complemento|Bairro|CEP|Logradouro)[ \t]*:|[\n\r|]|$)",
         bloco,
         flags=re.IGNORECASE
     )
@@ -439,7 +439,7 @@ def extrair_endereco_cadastro(
             dados["numero"] = candidato
 
     match = re.search(
-        r"Bairro\s*:\s*([^\n\r|]+)",
+        r"Bairro[ \t]*:[ \t]*(.*?)(?=[ \t]+(?:CEP|Logradouro|N[úu]mero|Complemento)[ \t]*:|[\n\r|]|$)",
         bloco,
         flags=re.IGNORECASE
     )
@@ -451,7 +451,7 @@ def extrair_endereco_cadastro(
         )
 
     match = re.search(
-        r"Complemento\s*:\s*([^\n\r|]+)",
+        r"Complemento[ \t]*:[ \t]*(.*?)(?=[ \t]+(?:Bairro|CEP|Logradouro|N[úu]mero)[ \t]*:|[\n\r|]|$)",
         bloco,
         flags=re.IGNORECASE
     )
@@ -463,7 +463,7 @@ def extrair_endereco_cadastro(
         )
 
     match = re.search(
-        r"CEP\s*:\s*(\d{5}-\d{3})",
+        r"CEP\s*:\s*(\d{2}\.?\d{3}-?\d{3})",
         bloco,
         flags=re.IGNORECASE
     )
@@ -1161,6 +1161,15 @@ def extrair_cadastro_municipal(
 
             break
 
+    if not dados["natureza_juridica"]:
+        match = re.search(
+            r"Desc\.?\s*Natureza\s+Jur[ií]dic[^\r\n]*?(?<!\d)(\d{3}-\d)\s+(Sociedade\s+Empres[aá]ria\s+Limitada)",
+            texto,
+            flags=re.IGNORECASE
+        )
+        if match:
+            dados["natureza_juridica"] = match.group(1) + " " + match.group(2).strip()
+
     # --------------------------------------------------------
     # ENDEREÇO
     # --------------------------------------------------------
@@ -1300,16 +1309,12 @@ def extrair_legalizacao(
     # --------------------------------------------------------
 
     match = re.search(
-        r"Complemento\s*:\s*(.*)",
-        texto,
-        flags=re.IGNORECASE
+        r"(?im)^\\s*Complemento\\s*:\\s*(.*?)(?=\\s+(?:Referência|Bairro|Município|Estado|CEP)\\s*:|[\\r\\n]|$)",
+        texto
     )
 
-    if match:
-
-        dados["complemento"] = (
-            match.group(1).strip()
-        )
+    if match and match.group(1).strip() not in ("", "—", "-"):
+        dados["complemento"] = match.group(1).strip()
 
     # --------------------------------------------------------
     # BAIRRO
@@ -1332,7 +1337,7 @@ def extrair_legalizacao(
     # --------------------------------------------------------
 
     match = re.search(
-        r"CEP\s*:\s*(\d{5}-\d{3})",
+        r"CEP\s*:\s*(\d{2}\.?\d{3}-?\d{3})",
         texto,
         flags=re.IGNORECASE
     )
@@ -1894,7 +1899,7 @@ def extrair_cnaes_aprova(texto):
 
 
 def extrair_aprova_completo(texto):
-    """Extrai dados do texto copiado do Aprova Digital."""
+    """Extrai os campos relevantes do texto copiado do Aprova Digital."""
     texto = texto or ""
     dados = {
         "cnpj": extrair_cnpj(texto),
@@ -1909,18 +1914,29 @@ def extrair_aprova_completo(texto):
         "socios": [],
     }
 
+    # Evita capturar a palavra "ou" da pergunta "Alterar Razão Social ou Nome Fantasia".
     dados["razao_social"] = primeiro_match([
-        r"Raz[aã]o\s+Social\s*:\s*([^\r\n|]+)",
-        r"Nome\s+Empresarial\s*:\s*([^\r\n|]+)",
-        r"Raz[aã]o\s+Social\s+(.+?)\s+(?:Nome|Horário|Horario)\b",
+        r"(?im)^\s*Raz[aã]o\s+Social\s*:\s*([^\r\n|]+)\s*$",
+        r"(?im)^\s*Raz[aã]o\s+Social\s*$\s*^\s*([A-ZÁÀÂÃÉÊÍÓÔÕÚÇ0-9&.,'’()\- ]{4,})\s*$",
+        r"(?im)^\s*Nome\s+Empresarial\s*:\s*([^\r\n|]+)\s*$",
     ], texto)
 
-    dados["natureza_juridica"] = primeiro_match([
-        r"Natureza\s+Jur[ií]dica\s*:\s*([^\r\n|]+)",
-        r"Natureza\s+Jur[ií]dica\s+(.+?)(?:\s{2,}|\r?\n)",
+    # No formulário, o código de natureza jurídica pode vir numa linha com
+    # texto auxiliar. Captura o código oficial 206-2 quando presente.
+    bloco_natureza = primeiro_match([
+        r"(?im)^\s*Natureza\s+jur[ií]dica\s*$\s*^\s*([^\r\n]+)\s*$",
+        r"(?im)^\s*Natureza\s+Jur[ií]dica\s*:\s*([^\r\n|]+)\s*$",
     ], texto)
+    m_natureza = re.search(
+        r"\b(206[-.]?2)\s*[- ]*\s*(Sociedade\s+Empresária\s+Limitada)\b",
+        bloco_natureza,
+        flags=re.IGNORECASE
+    )
+    if m_natureza:
+        dados["natureza_juridica"] = f"{m_natureza.group(1).replace('.', '-')} - {m_natureza.group(2)}"
+    else:
+        dados["natureza_juridica"] = bloco_natureza.strip()
 
-    # Preferir rótulos explícitos; o fallback cobre o texto REGIN do código original.
     dados["logradouro"] = primeiro_match([
         r"Logradouro\s*:\s*([^\r\n|]+)",
         r"Logradouro\s+(.+?)\s+(?:N[úu]mero|N[º°]|Predial)\b",
@@ -1938,32 +1954,97 @@ def extrair_aprova_completo(texto):
         r"Complemento\s*:\s*([^\r\n|]+)",
     ], texto)
     dados["cep"] = primeiro_match([
-        r"\bCEP\s*:\s*(\d{5}-?\d{3})",
-        r"\bCEP\s+(\d{5}-?\d{3})",
+        r"\bCEP\s*:\s*(\d{2}\.?\d{3}-?\d{3})",
+        r"\bCEP\s+(\d{2}\.?\d{3}-?\d{3})",
     ], texto)
     dados["cep"] = re.sub(r"(\d{5})(\d{3})", r"\1-\2", re.sub(r"\D", "", dados["cep"])) if dados["cep"] else ""
 
-    # Complementa endereço no padrão REGIN: Bairro ... Logradouro ... Número ... Predial ...
-    if not dados["bairro"] or not dados["logradouro"]:
-        m = re.search(r"REGIN\s+(.*?)\s+Raz[aã]o", normalizar_espacos(texto), re.I)
-        if m:
-            trecho = m.group(1)
-            if not dados["bairro"]:
-                dados["bairro"] = primeiro_match([r"\bBairro\s+(.+?)\s+Logradouro\b"], trecho)
-            if not dados["logradouro"]:
-                dados["logradouro"] = primeiro_match([r"\bLogradouro\s+(.+?)\s+N[úu]mero\b"], trecho)
-            if not dados["numero"]:
-                dados["numero"] = primeiro_match([r"\bPredial\s+(\d+[A-Za-z]?)"], trecho)
+    # Para comparar o endereço do estabelecimento, priorizar os campos do
+    # bloco REGIN (Deferido), e não os dados auxiliares da inscrição imobiliária.
+    regin_match = re.search(
+        r"REGIN\s*\(\s*Deferido\s*\)(.*?)(?=^\s*Raz[aã]o\s+Social\s*$)",
+        texto,
+        flags=re.IGNORECASE | re.DOTALL | re.MULTILINE
+    )
+    if regin_match:
+        bloco_regin = regin_match.group(1)
+        valor = primeiro_match([
+            r"(?im)^\s*Logradouro\s*$\s*^\s*([^\r\n]+)",
+            r"(?im)^\s*Logradouro\s*:\s*([^\r\n]+)",
+        ], bloco_regin)
+        if valor:
+            dados["logradouro"] = valor.strip()
 
-    # Quadro societário, quando estiver presente no texto do Aprova.
-    dados["socios"] = extrair_socios_legalizacao(texto)
+        valor = primeiro_match([
+            r"(?im)^\s*N[uú]mero\s+Predial\s*$\s*^\s*(\d+[A-Za-z]?)",
+            r"(?im)^\s*N[uú]mero\s+Predial\s*:?\s*(\d+[A-Za-z]?)",
+        ], bloco_regin)
+        if valor:
+            dados["numero"] = valor.strip()
+
+        valor = primeiro_match([
+            r"(?im)^\s*Bairro\s*$\s*^\s*([^\r\n]+)",
+            r"(?im)^\s*Bairro\s*:\s*([^\r\n]+)",
+        ], bloco_regin)
+        if valor:
+            dados["bairro"] = valor.strip()
+
+        valor = primeiro_match([
+            r"(?im)^\s*CEP\s*$\s*^\s*(\d{8}|\d{5}-\d{3})",
+            r"(?im)^\s*CEP\s*:\s*(\d{8}|\d{5}-\d{3})",
+        ], bloco_regin)
+        if valor:
+            cep_digitos = re.sub(r"\D", "", valor)
+            if len(cep_digitos) == 8:
+                dados["cep"] = cep_digitos[:5] + "-" + cep_digitos[5:]
+
+        complementos_regin = []
+        for rotulo in ("Complemento 1", "Complemento 2", "Complemento 3"):
+            valor = primeiro_match([
+                rf"(?im)^\s*{re.escape(rotulo)}[^\r\n]*\s*$\s*^\s*([^\r\n]+)",
+            ], bloco_regin)
+            if valor and normalizar_sem_acentos(valor) not in ("NAO ESPECIFICADO", "NÃO ESPECIFICADO", "-", "—"):
+                complementos_regin.append(valor.strip())
+        if complementos_regin:
+            dados["complemento"] = " / ".join(complementos_regin)
+        else:
+            dados["complemento"] = ""
+
+    # Sócios no Aprova: seção de inclusão/atualização, diferente do quadro
+    # societário da tela de Legalização.
+    bloco_socio = extrair_bloco(
+        texto,
+        "Sócio/Responsável a ser INCLUÍDO/ATUALIZADO",
+        "Sócio/Responsável a ser REMOVIDO"
+    )
+    if bloco_socio:
+        nome = primeiro_match([
+            r"(?im)^\s*Nome/Razão\s+Social\s*$\s*^\s*([^\r\n]+)",
+            r"(?im)^\s*Nome/Razão\s+Social\s*:?\s*([^\r\n]+)",
+        ], bloco_socio).strip(" ,;")
+        cpf_match = re.search(
+            r"(?<!\d)(\d{3}\.\d{3}\.\d{3}-\d{2}|\d{11})(?!\d)",
+            bloco_socio
+        )
+        qualificacao = primeiro_match([
+            r"(?im)^\s*Qualificação\s*$\s*^\s*(?:\d+\s+)?([^\r\n]+)",
+            r"(?im)^\s*Qualificação\s*:?\s*(?:\d+\s+)?([^\r\n]+)",
+        ], bloco_socio)
+        if nome and cpf_match:
+            dados["socios"] = [{
+                "cpf": re.sub(r"\D", "", cpf_match.group(1)),
+                "nome": nome,
+                "qualificacao": qualificacao.strip()
+            }]
+
+    if not dados["socios"]:
+        dados["socios"] = extrair_socios_legalizacao(texto)
     if not dados["socios"]:
         dados["socios"] = extrair_socios_cadastro(texto)
     return dados
 
-
 def extrair_cnpj_documento(texto):
-    """Extrai campos da consulta/Comprovante de Inscrição e Situação Cadastral do CNPJ."""
+    """Extrai campos do comprovante CNPJ, incluindo rótulos em linhas separadas."""
     texto = texto or ""
     dados = {
         "cnpj": extrair_cnpj(texto),
@@ -1975,36 +2056,62 @@ def extrair_cnpj_documento(texto):
         "complemento": "",
         "cep": "",
         "cnaes": extrair_cnaes_generico(texto),
+        "cnae_principal": "",
         "socios": [],
     }
+    bloco_principal = extrair_bloco(
+        texto,
+        "CÓDIGO E DESCRIÇÃO DA ATIVIDADE ECONÔMICA PRINCIPAL",
+        "CÓDIGO E DESCRIÇÃO DAS ATIVIDADES ECONÔMICAS SECUNDÁRIAS"
+    )
+    principal_match = re.search(
+        r"(?<!\d)(\d{2})\.(\d{2})[-.]?(\d)[/-]?(\d{2})(?!\d)",
+        bloco_principal
+    )
+    if principal_match:
+        dados["cnae_principal"] = "".join(principal_match.groups())
+    else:
+        principal_match = re.search(r"(?<!\d)(\d{7})(?!\d)", bloco_principal)
+        if principal_match:
+            dados["cnae_principal"] = principal_match.group(1)
+
     dados["razao_social"] = primeiro_match([
-        r"NOME\s+EMPRESARIAL\s*[\r\n: ]+\s*([^\r\n]+)",
-        r"EMPRESARIAL\s+([^\r\n]+)",
+        r"(?im)^\s*NOME\s+EMPRESARIAL\s*$\s*^\s*([^\r\n]+)\s*$",
+        r"(?im)^\s*NOME\s+EMPRESARIAL\s*:\s*([^\r\n]+)",
     ], texto)
     dados["natureza_juridica"] = primeiro_match([
-        r"C[ÓO]DIGO\s+E\s+DESCRI[ÇC][ÃA]O\s+DA\s+NATUREZA\s+JUR[ÍI]DICA\s*[\r\n: ]+\s*([^\r\n]+)",
-        r"NATUREZA\s+JUR[ÍI]DICA\s+([^\r\n]+)",
+        r"(?im)^\s*CÓDIGO\s+E\s+DESCRIÇÃO\s+DA\s+NATUREZA\s+JURÍDICA\s*$\s*^\s*([^\r\n]+)\s*$",
+        r"(?im)^\s*CÓDIGO\s+E\s+DESCRIÇÃO\s+DA\s+NATUREZA\s+JURÍDICA\s*:\s*([^\r\n]+)",
+        r"(?im)^\s*NATUREZA\s+JURÍDICA\s*$\s*^\s*([^\r\n]+)\s*$",
     ], texto)
     dados["logradouro"] = primeiro_match([
-        r"LOGRADOURO\s*[\r\n: ]+\s*([^\r\n]+)",
+        r"(?im)^\s*LOGRADOURO\s*$\s*^\s*([^\r\n]+)\s*$",
+        r"(?im)^\s*LOGRADOURO\s*:\s*([^\r\n]+)",
     ], texto)
     dados["numero"] = primeiro_match([
-        r"\bN[ÚU]MERO\s*[\r\n: ]+\s*([^\r\n]+)",
+        # Exige o rótulo isolado para não capturar "NÚMERO DE INSCRIÇÃO".
+        r"(?im)^\s*N[ÚU]MERO\s*$\s*^\s*(\d+[A-Za-z]?)\s*$",
+        r"(?im)^\s*N[ÚU]MERO\s*:\s*(\d+[A-Za-z]?)\s*$",
     ], texto)
     dados["complemento"] = primeiro_match([
-        r"\bCOMPLEMENTO\s*[\r\n: ]+\s*([^\r\n]+)",
+        r"(?im)^\s*COMPLEMENTO\s*$\s*^\s*([^\r\n]*)\s*$",
+        r"(?im)^\s*COMPLEMENTO\s*:\s*([^\r\n]*)",
     ], texto)
     dados["bairro"] = primeiro_match([
-        r"BAIRRO/DISTRITO\s*[\r\n: ]+\s*([^\r\n]+)",
-        r"\bBAIRRO\s*[\r\n: ]+\s*([^\r\n]+)",
+        r"(?im)^\s*BAIRRO/DISTRITO\s*$\s*^\s*([^\r\n]+)\s*$",
+        r"(?im)^\s*BAIRRO\s*$\s*^\s*([^\r\n]+)\s*$",
+        r"(?im)^\s*BAIRRO/DISTRITO\s*:\s*([^\r\n]+)",
+        r"(?im)^\s*BAIRRO\s*:\s*([^\r\n]+)",
     ], texto)
     dados["cep"] = primeiro_match([
-        r"\bCEP\s*[\r\n: ]+\s*(\d{5}-?\d{3})",
+        r"(?im)^\s*CEP\s*$\s*^\s*(\d{2}\.?\d{3}-?\d{3})\s*$",
+        r"(?im)^\s*CEP\s*:\s*(\d{2}\.?\d{3}-?\d{3})",
     ], texto)
     dados["numero"] = "" if normalizar_texto(dados["numero"]) in ("S/N", "SN", "NÃO INFORMADO") else dados["numero"]
+    if dados["complemento"].strip() and set(dados["complemento"].strip()) == {"*"}:
+        dados["complemento"] = ""
     dados["cep"] = re.sub(r"(\d{5})(\d{3})", r"\1-\2", re.sub(r"\D", "", dados["cep"])) if dados["cep"] else ""
     return dados
-
 
 def formatar_lista(valores):
     return ", ".join(formatar_cnae(x) for x in valores) if valores else ""
@@ -2085,40 +2192,120 @@ def mostrar_cnaes_quatro(dados_docs):
     else:
         st.warning("Há diferenças nas listas de CNAEs. Verifique a tabela acima; a extração automática depende do formato do texto copiado.")
 
+    # Se o CNAE principal está identificado no comprovante CNPJ, mas não aparece
+    # no intervalo deliberadamente delimitado do Aprova, destacar essa pendência.
+    if "Aprova Digital" in dados_docs:
+        principal = (
+            dados_docs.get("CNPJ", {}).get("cnae_principal", "")
+            or dados_docs.get("Legalização", {}).get("cnae_principal", "")
+        )
+        cnaes_aprova = set(dados_docs["Aprova Digital"].get("cnaes", []))
+        if principal and principal not in cnaes_aprova:
+            st.warning(
+                f"O CNAE principal {formatar_cnae(principal)} foi identificado em outro documento, "
+                "mas não aparece no trecho delimitado da solicitação do Aprova Digital. "
+                "Confira se a atividade principal deveria constar no formulário, especialmente "
+                "quando a solicitação envolve alteração de endereço."
+            )
+
+    # Não acrescenta códigos de fora do intervalo do Aprova. Apenas alerta
+    # quando os demais documentos apontam atividades que não aparecem nele.
+    if "Aprova Digital" in dados_docs and len(dados_docs) >= 2:
+        cnaes_aprova = set(dados_docs["Aprova Digital"].get("cnaes", []))
+        listas_outros = [
+            set(dados.get("cnaes", []))
+            for nome, dados in dados_docs.items()
+            if nome != "Aprova Digital"
+        ]
+        comuns_outros = set.intersection(*listas_outros) if listas_outros else set()
+        ausentes_aprova = sorted(comuns_outros - cnaes_aprova)
+        if ausentes_aprova:
+            st.info(
+                "Conferência do Aprova Digital: estes CNAEs aparecem nos demais documentos, "
+                "mas não foram encontrados no trecho delimitado da solicitação: "
+                + ", ".join(formatar_cnae(c) for c in ausentes_aprova)
+                + ". Não foram adicionados automaticamente, pois a extração respeita o intervalo definido. "
+                "Confirme se o CNAE principal deve constar na solicitação."
+            )
+
 
 def mostrar_socios_quatro(dados_docs):
     st.subheader("Comparação dos sócios")
+
+    # O comprovante padrão de CNPJ não contém quadro societário.
+    # Portanto, ele não deve contar como "sócio ausente".
+    docs_societarios = {
+        nome: dados
+        for nome, dados in dados_docs.items()
+        if nome in ("Aprova Digital", "Cadastro Municipal", "Legalização")
+    }
+
+    if len(docs_societarios) < 2:
+        st.info(
+            "A consulta padrão do CNPJ não apresenta quadro societário. "
+            "Para comparar sócios, informe pelo menos dois destes documentos: "
+            "Aprova Digital, Cadastro Municipal e Legalização."
+        )
+        return
+
     todos = []
-    for nome_doc, dados in dados_docs.items():
+    for nome_doc, dados in docs_societarios.items():
         for socio in dados.get("socios", []):
             nome = socio.get("nome", "").strip()
             if nome:
                 chave = normalizar_sem_acentos(nome)
                 if not any(x["chave"] == chave and x["documento"] == nome_doc for x in todos):
-                    todos.append({"chave": chave, "nome": nome, "documento": nome_doc, "cpf": socio.get("cpf", ""), "qualificacao": socio.get("qualificacao", "")})
+                    todos.append({
+                        "chave": chave,
+                        "nome": nome,
+                        "documento": nome_doc,
+                        "cpf": socio.get("cpf", ""),
+                        "qualificacao": socio.get("qualificacao", "")
+                    })
+
     if not todos:
-        st.warning("Não foi possível identificar sócios nos textos. Confira o conteúdo das seções de quadro societário; ausência de extração não significa ausência de sócios.")
+        st.warning(
+            "Não foi possível identificar sócios nos documentos que contêm quadro societário. "
+            "Confira a extração; ausência de identificação não significa ausência de sócios."
+        )
         return
+
     nomes = sorted(set(x["chave"] for x in todos))
     linhas = []
     for chave in nomes:
         linha = {"Sócio": next(x["nome"] for x in todos if x["chave"] == chave)}
         docs_presentes = []
-        for nome_doc, dados in dados_docs.items():
-            socio = next((s for s in dados.get("socios", []) if normalizar_sem_acentos(s.get("nome", "")) == chave), None)
+        for nome_doc, dados in docs_societarios.items():
+            socio = next(
+                (s for s in dados.get("socios", [])
+                 if normalizar_sem_acentos(s.get("nome", "")) == chave),
+                None
+            )
             linha[nome_doc] = socio.get("nome", "—") if socio else "—"
             if socio:
                 docs_presentes.append(nome_doc)
-        linha["Resultado"] = f"🟢 Presente em todos os {len(dados_docs)} informados" if len(docs_presentes) == len(dados_docs) else f"🟠 Presente em {len(docs_presentes)}/{len(dados_docs)}"
+        linha["Resultado"] = (
+            f"🟢 Presente nos {len(docs_societarios)} documentos com quadro societário"
+            if len(docs_presentes) == len(docs_societarios)
+            else f"🟠 Presente em {len(docs_presentes)}/{len(docs_societarios)} documentos com quadro societário"
+        )
         linhas.append(linha)
+
     st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
-    if all(all(any(normalizar_sem_acentos(s.get("nome", "")) == chave for s in d.get("socios", [])) for d in dados_docs.values()) for chave in nomes):
-        st.success(f"Todos os nomes de sócios identificados aparecem nos {len(dados_docs)} documentos informados.")
+    if all(
+        all(
+            any(normalizar_sem_acentos(s.get("nome", "")) == chave for s in dados.get("socios", []))
+            for dados in docs_societarios.values()
+        )
+        for chave in nomes
+    ):
+        st.success("Os sócios identificados coincidem entre os documentos que apresentam quadro societário.")
     else:
-        st.warning("Há sócios identificados em apenas parte dos documentos. Verifique se cada fonte contém o quadro societário.")
+        st.warning(
+            "Há sócios identificados em apenas parte dos documentos com quadro societário. "
+            "Verifique os dados e as seções extraídas."
+        )
 
-
-# ============================================================
 # INTERFACE UNIFICADA — QUATRO DOCUMENTOS
 # ============================================================
 
@@ -2191,7 +2378,10 @@ if analisar:
                 st.write("CNPJ:", dados.get("cnpj") or "Não identificado")
                 st.write("Razão social:", dados.get("razao_social") or "Não identificada")
                 st.write("CNAEs identificados:", len(dados.get("cnaes", [])))
-                st.write("Sócios identificados:", len(dados.get("socios", [])))
+                if nome == "CNPJ":
+                    st.write("Quadro societário: não consta no comprovante padrão")
+                else:
+                    st.write("Sócios identificados:", len(dados.get("socios", [])))
         st.divider()
         st.header("🔍 Comparação geral dos campos")
         mostrar_comparacao_quatro_documentos(dados_docs)
@@ -2205,8 +2395,17 @@ if analisar:
         campos_chave = ("cnpj", "razao_social", "logradouro", "numero", "bairro", "cep")
         divergencias = []
         pendencias = []
+        normalizadores_campos = {
+            "cnpj": normalizar_cnpj_local,
+            "razao_social": normalizar_razao_social,
+            "logradouro": normalizar_logradouro,
+            "numero": normalizar_numero,
+            "bairro": normalizar_simples,
+            "cep": normalizar_cep,
+        }
         for campo in campos_chave:
-            valores = [normalizar_cnpj_local(d.get(campo, "")) if campo == "cnpj" else normalizar_sem_acentos(d.get(campo, "")) for d in dados_docs.values()]
+            normalizador = normalizadores_campos.get(campo, normalizar_simples)
+            valores = [normalizador(d.get(campo, "")) for d in dados_docs.values()]
             preenchidos = [v for v in valores if v]
             if len(set(preenchidos)) > 1:
                 divergencias.append(campo.replace("_", " ").title())
