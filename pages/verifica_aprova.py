@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 import unicodedata
 import streamlit as st
 
@@ -1827,485 +1828,360 @@ def limpar_campos():
     ] = ""
 
 
-# ============================================================
-# INTERFACE
-# ============================================================
-
-st.title(
-    "🔎 Verifica preenchimento - Cadastro - Legalização"
-)
-
-st.write(
-    "Compare os dados do Cadastro Municipal "
-    "com os dados da Legalização."
-)
-
 
 # ============================================================
-# INPUTS
+# EXTRAÇÃO DOS DOCUMENTOS 1 E 2
 # ============================================================
+
+def primeiro_match(padroes, texto, flags=re.IGNORECASE | re.MULTILINE):
+    if not texto:
+        return ""
+    for padrao in padroes:
+        m = re.search(padrao, texto, flags)
+        if m:
+            return m.group(1).strip(" \t\r\n:;|")
+    return ""
+
+
+def extrair_cnaes_generico(texto):
+    """Extrai CNAEs de formatos comuns, retornando códigos de 7 dígitos."""
+    if not texto:
+        return []
+    encontrados = []
+    # formatos 00.00-0/00, 00.00-0-00 e 0000000
+    for m in re.finditer(r'(?<!\d)(\d{2})[.]?(\d{2})[-.]?(\d)[/-]?(\d{2})(?!\d)', texto):
+        codigo = "".join(m.groups())
+        if codigo not in encontrados:
+            encontrados.append(codigo)
+    # códigos tabulares sem pontuação; restringe às linhas com aparência de CNAE
+    for linha in texto.splitlines():
+        m = re.match(r'\s*(\d{7})\s*(?:\||\s+-\s+|\s{2,})', linha)
+        if m and m.group(1) not in encontrados:
+            encontrados.append(m.group(1))
+    return encontrados
+
+
+def extrair_aprova_completo(texto):
+    """Extrai dados do texto copiado do Aprova Digital."""
+    texto = texto or ""
+    dados = {
+        "cnpj": extrair_cnpj(texto),
+        "razao_social": "",
+        "natureza_juridica": "",
+        "logradouro": "",
+        "numero": "",
+        "bairro": "",
+        "complemento": "",
+        "cep": "",
+        "cnaes": extrair_cnaes_generico(texto),
+        "socios": [],
+    }
+
+    dados["razao_social"] = primeiro_match([
+        r"Raz[aã]o\s+Social\s*:\s*([^\r\n|]+)",
+        r"Nome\s+Empresarial\s*:\s*([^\r\n|]+)",
+        r"Raz[aã]o\s+Social\s+(.+?)\s+(?:Nome|Horário|Horario)\b",
+    ], texto)
+
+    dados["natureza_juridica"] = primeiro_match([
+        r"Natureza\s+Jur[ií]dica\s*:\s*([^\r\n|]+)",
+        r"Natureza\s+Jur[ií]dica\s+(.+?)(?:\s{2,}|\r?\n)",
+    ], texto)
+
+    # Preferir rótulos explícitos; o fallback cobre o texto REGIN do código original.
+    dados["logradouro"] = primeiro_match([
+        r"Logradouro\s*:\s*([^\r\n|]+)",
+        r"Logradouro\s+(.+?)\s+(?:N[úu]mero|N[º°]|Predial)\b",
+    ], texto)
+    dados["numero"] = primeiro_match([
+        r"N[úu]mero\s*:\s*(\d+[A-Za-z]?)",
+        r"N[úu]mero\s+Predial\s*[: ]*\s*(\d+[A-Za-z]?)",
+        r"Predial\s+(\d+[A-Za-z]?)",
+    ], texto)
+    dados["bairro"] = primeiro_match([
+        r"Bairro\s*:\s*([^\r\n|]+)",
+        r"\bBairro\s+(.+?)\s+Logradouro\b",
+    ], texto)
+    dados["complemento"] = primeiro_match([
+        r"Complemento\s*:\s*([^\r\n|]+)",
+    ], texto)
+    dados["cep"] = primeiro_match([
+        r"\bCEP\s*:\s*(\d{5}-?\d{3})",
+        r"\bCEP\s+(\d{5}-?\d{3})",
+    ], texto)
+    dados["cep"] = re.sub(r"(\d{5})(\d{3})", r"\1-\2", re.sub(r"\D", "", dados["cep"])) if dados["cep"] else ""
+
+    # Complementa endereço no padrão REGIN: Bairro ... Logradouro ... Número ... Predial ...
+    if not dados["bairro"] or not dados["logradouro"]:
+        m = re.search(r"REGIN\s+(.*?)\s+Raz[aã]o", normalizar_espacos(texto), re.I)
+        if m:
+            trecho = m.group(1)
+            if not dados["bairro"]:
+                dados["bairro"] = primeiro_match([r"\bBairro\s+(.+?)\s+Logradouro\b"], trecho)
+            if not dados["logradouro"]:
+                dados["logradouro"] = primeiro_match([r"\bLogradouro\s+(.+?)\s+N[úu]mero\b"], trecho)
+            if not dados["numero"]:
+                dados["numero"] = primeiro_match([r"\bPredial\s+(\d+[A-Za-z]?)"], trecho)
+
+    # Quadro societário, quando estiver presente no texto do Aprova.
+    dados["socios"] = extrair_socios_legalizacao(texto)
+    if not dados["socios"]:
+        dados["socios"] = extrair_socios_cadastro(texto)
+    return dados
+
+
+def extrair_cnpj_documento(texto):
+    """Extrai campos da consulta/Comprovante de Inscrição e Situação Cadastral do CNPJ."""
+    texto = texto or ""
+    dados = {
+        "cnpj": extrair_cnpj(texto),
+        "razao_social": "",
+        "natureza_juridica": "",
+        "logradouro": "",
+        "numero": "",
+        "bairro": "",
+        "complemento": "",
+        "cep": "",
+        "cnaes": extrair_cnaes_generico(texto),
+        "socios": [],
+    }
+    dados["razao_social"] = primeiro_match([
+        r"NOME\s+EMPRESARIAL\s*[\r\n: ]+\s*([^\r\n]+)",
+        r"EMPRESARIAL\s+([^\r\n]+)",
+    ], texto)
+    dados["natureza_juridica"] = primeiro_match([
+        r"C[ÓO]DIGO\s+E\s+DESCRI[ÇC][ÃA]O\s+DA\s+NATUREZA\s+JUR[ÍI]DICA\s*[\r\n: ]+\s*([^\r\n]+)",
+        r"NATUREZA\s+JUR[ÍI]DICA\s+([^\r\n]+)",
+    ], texto)
+    dados["logradouro"] = primeiro_match([
+        r"LOGRADOURO\s*[\r\n: ]+\s*([^\r\n]+)",
+    ], texto)
+    dados["numero"] = primeiro_match([
+        r"\bN[ÚU]MERO\s*[\r\n: ]+\s*([^\r\n]+)",
+    ], texto)
+    dados["complemento"] = primeiro_match([
+        r"\bCOMPLEMENTO\s*[\r\n: ]+\s*([^\r\n]+)",
+    ], texto)
+    dados["bairro"] = primeiro_match([
+        r"BAIRRO/DISTRITO\s*[\r\n: ]+\s*([^\r\n]+)",
+        r"\bBAIRRO\s*[\r\n: ]+\s*([^\r\n]+)",
+    ], texto)
+    dados["cep"] = primeiro_match([
+        r"\bCEP\s*[\r\n: ]+\s*(\d{5}-?\d{3})",
+    ], texto)
+    dados["numero"] = "" if normalizar_texto(dados["numero"]) in ("S/N", "SN", "NÃO INFORMADO") else dados["numero"]
+    dados["cep"] = re.sub(r"(\d{5})(\d{3})", r"\1-\2", re.sub(r"\D", "", dados["cep"])) if dados["cep"] else ""
+    return dados
+
+
+def formatar_lista(valores):
+    return ", ".join(formatar_cnae(x) for x in valores) if valores else ""
+
+
+def status_campo(valores, normalizador):
+    presentes = [(nome, normalizador(valor)) for nome, valor in valores.items() if valor and normalizador(valor)]
+    if not presentes:
+        return "⚪ Não informado"
+    unicos = {v for _, v in presentes}
+    if len(unicos) == 1 and len(presentes) == len(valores):
+        return "🟢 Coincide em todos"
+    if len(unicos) == 1:
+        return "🟠 Coincide nos informados; há campo ausente"
+    return "🔴 Divergência"
+
+
+def normalizar_simples(valor):
+    return normalizar_sem_acentos(valor or "").strip()
+
+
+def mostrar_comparacao_quatro_documentos(dados_docs):
+    campos = [
+        ("CNPJ", "cnpj", normalizar_cnpj_local),
+        ("Razão social", "razao_social", normalizar_razao_social),
+        ("Natureza jurídica", "natureza_juridica", normalizar_natureza_juridica),
+        ("Logradouro", "logradouro", normalizar_logradouro),
+        ("Número", "numero", normalizar_numero),
+        ("Bairro", "bairro", normalizar_simples),
+        ("Complemento", "complemento", normalizar_complemento),
+        ("CEP", "cep", normalizar_cep),
+    ]
+    linhas = []
+    for titulo, chave, norm in campos:
+        valores = {nome: d.get(chave, "") for nome, d in dados_docs.items()}
+        preenchidos = [(nome, norm(v)) for nome, v in valores.items() if v and norm(v)]
+        diferentes = len({v for _, v in preenchidos}) > 1
+        ausentes = len(preenchidos) < len(valores)
+        if not preenchidos:
+            status = "⚪ Não informado"
+        elif diferentes:
+            status = "🔴 Divergência"
+        elif ausentes:
+            status = "🟠 Parcial / campo ausente"
+        else:
+            status = "🟢 Coincide nos quatro"
+        linha = {"Campo": titulo}
+        linha.update({nome: (valores[nome] or "— Não informado —") for nome in dados_docs})
+        linha["Resultado"] = status
+        linhas.append(linha)
+    st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
+
+
+def normalizar_cnpj_local(valor):
+    return re.sub(r"\D", "", str(valor or ""))
+
+
+def mostrar_cnaes_quatro(dados_docs):
+    st.subheader("Comparação dos CNAEs")
+    todos = sorted(set(c for d in dados_docs.values() for c in d.get("cnaes", [])))
+    if not todos:
+        st.warning("Nenhum CNAE foi identificado nos textos. Confira a extração antes de concluir que não existem atividades.")
+        return
+    linhas = []
+    for cnae in todos:
+        linha = {"CNAE": formatar_cnae(cnae)}
+        for nome, dados in dados_docs.items():
+            linha[nome] = "✅" if cnae in dados.get("cnaes", []) else "—"
+        presentes = sum(cnae in d.get("cnaes", []) for d in dados_docs.values())
+        linha["Resultado"] = "🟢 Nos quatro" if presentes == len(dados_docs) else f"🟠 Em {presentes}/4 documento(s)"
+        linhas.append(linha)
+    st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
+    conjuntos = {nome: set(d.get("cnaes", [])) for nome, d in dados_docs.items()}
+    base = next(iter(conjuntos.values()))
+    iguais = all(s == base for s in conjuntos.values())
+    if iguais:
+        st.success("Os CNAEs extraídos coincidem entre os quatro documentos.")
+    else:
+        st.warning("Há diferenças nas listas de CNAEs. Verifique a tabela acima; a extração automática depende do formato do texto copiado.")
+
+
+def mostrar_socios_quatro(dados_docs):
+    st.subheader("Comparação dos sócios")
+    todos = []
+    for nome_doc, dados in dados_docs.items():
+        for socio in dados.get("socios", []):
+            nome = socio.get("nome", "").strip()
+            if nome:
+                chave = normalizar_sem_acentos(nome)
+                if not any(x["chave"] == chave and x["documento"] == nome_doc for x in todos):
+                    todos.append({"chave": chave, "nome": nome, "documento": nome_doc, "cpf": socio.get("cpf", ""), "qualificacao": socio.get("qualificacao", "")})
+    if not todos:
+        st.warning("Não foi possível identificar sócios nos textos. Confira o conteúdo das seções de quadro societário; ausência de extração não significa ausência de sócios.")
+        return
+    nomes = sorted(set(x["chave"] for x in todos))
+    linhas = []
+    for chave in nomes:
+        linha = {"Sócio": next(x["nome"] for x in todos if x["chave"] == chave)}
+        docs_presentes = []
+        for nome_doc, dados in dados_docs.items():
+            socio = next((s for s in dados.get("socios", []) if normalizar_sem_acentos(s.get("nome", "")) == chave), None)
+            linha[nome_doc] = socio.get("nome", "—") if socio else "—"
+            if socio:
+                docs_presentes.append(nome_doc)
+        linha["Resultado"] = "🟢 Nos quatro" if len(docs_presentes) == len(dados_docs) else f"🟠 Presente em {len(docs_presentes)}/4"
+        linhas.append(linha)
+    st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
+    if all(all(any(normalizar_sem_acentos(s.get("nome", "")) == chave for s in d.get("socios", [])) for d in dados_docs.values()) for chave in nomes):
+        st.success("Todos os nomes de sócios identificados aparecem nos quatro documentos.")
+    else:
+        st.warning("Há sócios identificados em apenas parte dos documentos. Verifique se cada fonte contém o quadro societário.")
+
+
+# ============================================================
+# INTERFACE UNIFICADA — QUATRO DOCUMENTOS
+# ============================================================
+
+st.title("🔎 Verifica preenchimento — comparação de quatro documentos")
+st.write("Cole o texto completo de cada fonte. A análise compara simultaneamente Aprova Digital, CNPJ, Cadastro Municipal e Legalização.")
+
+if "texto_aprova" not in st.session_state:
+    st.session_state["texto_aprova"] = ""
+if "texto_cnpj" not in st.session_state:
+    st.session_state["texto_cnpj"] = ""
+if "texto_cadastro" not in st.session_state:
+    st.session_state["texto_cadastro"] = ""
+if "texto_legalizacao" not in st.session_state:
+    st.session_state["texto_legalizacao"] = ""
 
 col1, col2 = st.columns(2)
-
-
 with col1:
-
-    st.subheader(
-        "📄 Arquivo 1 — Cadastro Municipal"
-    )
-
-    st.text_area(
-        "Cole aqui o conteúdo completo do Cadastro Municipal",
-        height=400,
-        key="texto_cadastro"
-    )
-
-
+    st.subheader("📄 Documento 1 — Aprova Digital")
+    st.text_area("Texto do Aprova Digital", height=300, key="texto_aprova", placeholder="Cole aqui o texto completo do Aprova Digital...")
 with col2:
+    st.subheader("📄 Documento 2 — CNPJ")
+    st.text_area("Texto do CNPJ", height=300, key="texto_cnpj", placeholder="Cole aqui o texto completo da consulta do CNPJ...")
 
-    st.subheader(
-        "📄 Arquivo 2 — Legalização"
-    )
+col3, col4 = st.columns(2)
+with col3:
+    st.subheader("📄 Documento 3 — Cadastro Municipal")
+    st.text_area("Texto do Cadastro Municipal", height=300, key="texto_cadastro", placeholder="Cole aqui o texto completo do Cadastro Municipal...")
+with col4:
+    st.subheader("📄 Documento 4 — Legalização")
+    st.text_area("Texto da Legalização", height=300, key="texto_legalizacao", placeholder="Cole aqui o texto completo da Legalização...")
 
-    st.text_area(
-        "Cole aqui o conteúdo completo da Legalização",
-        height=400,
-        key="texto_legalizacao"
-    )
+def limpar_todos_campos():
+    for chave in ("texto_aprova", "texto_cnpj", "texto_cadastro", "texto_legalizacao"):
+        st.session_state[chave] = ""
 
-
-# ============================================================
-# BOTÕES
-# ============================================================
-
-col1, col2 = st.columns(2)
-
-
-with col1:
-
-    analisar = st.button(
-        "🔎 Analisar documentos",
-        type="primary",
-        use_container_width=True
-    )
-
-
-with col2:
-
-    st.button(
-        "🧹 Limpar",
-        on_click=limpar_campos,
-        use_container_width=True
-    )
-
-
-# ============================================================
-# PROCESSAMENTO
-# ============================================================
+b1, b2, _ = st.columns([1, 1, 4])
+with b1:
+    analisar = st.button("🔎 Comparar os quatro documentos", type="primary", use_container_width=True)
+with b2:
+    st.button("🧹 Limpar", on_click=limpar_todos_campos, use_container_width=True)
 
 if analisar:
-
-    texto_cadastro = st.session_state[
-        "texto_cadastro"
-    ]
-
-    texto_legalizacao = st.session_state[
-        "texto_legalizacao"
-    ]
-
-    if (
-        not texto_cadastro
-        or not texto_legalizacao
-    ):
-
-        st.warning(
-            "⚠️ Informe os dois documentos "
-            "antes de realizar a análise."
-        )
-
+    textos = {
+        "Aprova Digital": st.session_state["texto_aprova"],
+        "CNPJ": st.session_state["texto_cnpj"],
+        "Cadastro Municipal": st.session_state["texto_cadastro"],
+        "Legalização": st.session_state["texto_legalizacao"],
+    }
+    faltantes = [nome for nome, texto in textos.items() if not texto.strip()]
+    if faltantes:
+        st.warning("Preencha os quatro documentos antes de comparar. Faltam: " + ", ".join(faltantes) + ".")
     else:
-
-        cadastro = (
-            extrair_cadastro_municipal(
-                texto_cadastro
-            )
-        )
-
-        legalizacao = (
-            extrair_legalizacao(
-                texto_legalizacao
-            )
-        )
-
-        # ====================================================
-        # DADOS IDENTIFICADOS
-        # ====================================================
-
+        dados_docs = {
+            "Aprova Digital": extrair_aprova_completo(textos["Aprova Digital"]),
+            "CNPJ": extrair_cnpj_documento(textos["CNPJ"]),
+            "Cadastro Municipal": extrair_cadastro_municipal(textos["Cadastro Municipal"]),
+            "Legalização": extrair_legalizacao(textos["Legalização"]),
+        }
         st.divider()
-
-        st.header(
-            "📋 Dados identificados"
-        )
-
-        col1, col2 = st.columns(2)
-
-        # ----------------------------------------------------
-        # CADASTRO
-        # ----------------------------------------------------
-
-        with col1:
-
-            st.subheader(
-                "Cadastro Municipal"
-            )
-
-            st.write(
-                f"**CNPJ:** "
-                f"{cadastro['cnpj'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Razão Social:** "
-                f"{cadastro['razao_social'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Natureza Jurídica:** "
-                f"{cadastro['natureza_juridica'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Logradouro:** "
-                f"{cadastro['logradouro'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Número:** "
-                f"{cadastro['numero'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Bairro:** "
-                f"{cadastro['bairro'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Complemento:** "
-                f"{cadastro['complemento'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**CEP:** "
-                f"{cadastro['cep'] or 'Não informado'}"
-            )
-
-        # ----------------------------------------------------
-        # LEGALIZAÇÃO
-        # ----------------------------------------------------
-
-        with col2:
-
-            st.subheader(
-                "Legalização"
-            )
-
-            st.write(
-                f"**CNPJ:** "
-                f"{legalizacao['cnpj'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Razão Social:** "
-                f"{legalizacao['razao_social'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Natureza Jurídica:** "
-                f"{legalizacao['natureza_juridica'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Logradouro:** "
-                f"{legalizacao['logradouro'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Número:** "
-                f"{legalizacao['numero'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Bairro:** "
-                f"{legalizacao['bairro'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**Complemento:** "
-                f"{legalizacao['complemento'] or 'Não informado'}"
-            )
-
-            st.write(
-                f"**CEP:** "
-                f"{legalizacao['cep'] or 'Não informado'}"
-            )
-
-        # ====================================================
-        # COMPARAÇÃO DOS DADOS
-        # ====================================================
-
+        st.header("📋 Resumo dos dados identificados")
+        cols = st.columns(4)
+        for col, (nome, dados) in zip(cols, dados_docs.items()):
+            with col:
+                st.markdown(f"**{nome}**")
+                st.write("CNPJ:", dados.get("cnpj") or "Não identificado")
+                st.write("Razão social:", dados.get("razao_social") or "Não identificada")
+                st.write("CNAEs identificados:", len(dados.get("cnaes", [])))
+                st.write("Sócios identificados:", len(dados.get("socios", [])))
         st.divider()
-
-        st.header(
-            "🔍 Comparação dos dados"
-        )
-
-        resultados = {}
-
-        resultados["CNPJ"] = (
-            mostrar_comparacao(
-                "CNPJ",
-                cadastro["cnpj"],
-                legalizacao["cnpj"],
-                normalizar_cep
-            )
-        )
-
-        resultados["Razão Social"] = (
-            mostrar_comparacao(
-                "Razão Social",
-                cadastro["razao_social"],
-                legalizacao["razao_social"],
-                normalizar_razao_social
-            )
-        )
-
-        resultados["Natureza Jurídica"] = (
-            mostrar_comparacao(
-                "Natureza Jurídica",
-                cadastro["natureza_juridica"],
-                legalizacao["natureza_juridica"],
-                normalizar_natureza_juridica
-            )
-        )
-
-        resultados["Logradouro"] = (
-            mostrar_comparacao(
-                "Logradouro",
-                cadastro["logradouro"],
-                legalizacao["logradouro"],
-                normalizar_logradouro
-            )
-        )
-
-        resultados["Número"] = (
-            mostrar_comparacao(
-                "Número",
-                cadastro["numero"],
-                legalizacao["numero"],
-                normalizar_numero
-            )
-        )
-
-        resultados["Bairro"] = (
-            mostrar_comparacao(
-                "Bairro",
-                cadastro["bairro"],
-                legalizacao["bairro"],
-                normalizar_sem_acentos
-            )
-        )
-
-        resultados["Complemento"] = (
-            mostrar_comparacao(
-                "Complemento",
-                cadastro["complemento"],
-                legalizacao["complemento"],
-                normalizar_complemento
-            )
-        )
-
-        resultados["CEP"] = (
-            mostrar_comparacao(
-                "CEP",
-                cadastro["cep"],
-                legalizacao["cep"],
-                normalizar_cep
-            )
-        )
-
-        # ====================================================
-        # CNAEs
-        # ====================================================
-
+        st.header("🔍 Comparação geral dos campos")
+        mostrar_comparacao_quatro_documentos(dados_docs)
         st.divider()
-
-        mostrar_cnaes(
-            cadastro["cnaes"],
-            legalizacao["cnaes"]
-        )
-
-        # ====================================================
-        # COMPARAÇÃO DOS SÓCIOS
-        # ====================================================
-
+        mostrar_cnaes_quatro(dados_docs)
         st.divider()
-        divergencia_socios = mostrar_socios(
-            cadastro["socios"],
-            legalizacao["socios"]
-        )
-
-        # ====================================================
-        # RESULTADO FINAL
-        # ====================================================
-
+        mostrar_socios_quatro(dados_docs)
         st.divider()
-
-        st.header(
-            "📊 Resultado da análise"
-        )
-
+        st.header("📊 Resultado geral")
+        # Contagem baseada nos valores extraídos, sem declarar conformidade quando nada foi extraído.
+        campos_chave = ("cnpj", "razao_social", "logradouro", "numero", "bairro", "cep")
         divergencias = []
         pendencias = []
-
-        for campo, status in (
-            resultados.items()
-        ):
-
-            if status in (
-                "diferente",
-                "ausente_cadastro",
-                "ausente_legalizacao"
-            ):
-
-                divergencias.append(
-                    campo
-                )
-
-            elif status == (
-                "ambos_nao_informados"
-            ):
-
-                pendencias.append(
-                    campo
-                )
-
-        (
-            _,
-            somente_cadastro,
-            somente_legalizacao
-        ) = comparar_cnaes(
-            cadastro["cnaes"],
-            legalizacao["cnaes"]
-        )
-
-        if (
-            somente_cadastro
-            or somente_legalizacao
-        ):
-
-            divergencias.append(
-                "CNAEs"
-            )
-
-        socios_comuns, socios_somente_cadastro, socios_somente_legalizacao = comparar_socios(
-            cadastro["socios"], legalizacao["socios"]
-        )
-        if socios_somente_cadastro or socios_somente_legalizacao:
-            divergencias.append("Sócios")
-        elif not cadastro["socios"] or not legalizacao["socios"]:
-            pendencias.append("Sócios (extração não confirmada)")
-
+        for campo in campos_chave:
+            valores = [normalizar_cnpj_local(d.get(campo, "")) if campo == "cnpj" else normalizar_sem_acentos(d.get(campo, "")) for d in dados_docs.values()]
+            preenchidos = [v for v in valores if v]
+            if len(set(preenchidos)) > 1:
+                divergencias.append(campo.replace("_", " ").title())
+            if len(preenchidos) < len(valores):
+                pendencias.append(campo.replace("_", " ").title())
         if divergencias:
-
-            st.error(
-                "🔴 Foram encontradas divergências."
-            )
-
-            st.write(
-                "**Campos com divergência:** "
-                + ", ".join(
-                    divergencias
-                )
-            )
-
+            st.error("Foram encontradas divergências nos campos: " + ", ".join(divergencias) + ".")
         elif pendencias:
-
-            st.warning(
-                "🟠 Não foram encontradas divergências "
-                "nos dados informados, mas existem campos "
-                "não informados nos dois documentos."
-            )
-
-            st.write(
-                "**Campos não informados:** "
-                + ", ".join(
-                    pendencias
-                )
-            )
-
+            st.warning("Não foram detectadas divergências entre os valores extraídos, mas há campos não identificados em alguma fonte: " + ", ".join(pendencias) + ".")
         else:
-
-            st.success(
-                "🟢 Os dados analisados estão consistentes "
-                "entre o Cadastro Municipal e a Legalização."
-            )
-
-        # ====================================================
-        # CONFERÊNCIA TÉCNICA
-        # ====================================================
-
-        with st.expander(
-            "🛠️ Conferência técnica da extração"
-        ):
-
-            st.write(
-                "**Quantidade de CNAEs no Cadastro:**",
-                len(cadastro["cnaes"])
-            )
-
-            st.write(
-                [
-                    formatar_cnae(cnae)
-                    for cnae in cadastro["cnaes"]
-                ]
-            )
-
-            st.write(
-                "**Quantidade de CNAEs na Legalização:**",
-                len(legalizacao["cnaes"])
-            )
-
-            st.write(
-                [
-                    formatar_cnae(cnae)
-                    for cnae in legalizacao["cnaes"]
-                ]
-            )
-
-            st.write(
-                "**Número extraído do Cadastro:**",
-                cadastro["numero"]
-            )
-
-            st.write(
-                "**Logradouro extraído do Cadastro:**",
-                cadastro["logradouro"]
-            )
-
-            st.write(
-                "**Bairro extraído do Cadastro:**",
-                cadastro["bairro"]
-            )
-
-            st.write(
-                "**Complemento extraído do Cadastro:**",
-                cadastro["complemento"]
-            )
-
-            st.write(
-                "**CEP extraído do Cadastro:**",
-                cadastro["cep"]
-            )
-
-            st.write("**Sócios extraídos do Cadastro Municipal:**", cadastro["socios"])
-            st.write("**Sócios extraídos da Legalização:**", legalizacao["socios"])
+            st.success("Os campos principais extraídos coincidem entre os quatro documentos. Confira também CNAEs, sócios e a tabela completa.")
+        with st.expander("🛠️ Conferência técnica da extração"):
+            for nome, dados in dados_docs.items():
+                st.markdown(f"**{nome}**")
+                st.json(dados)
