@@ -2050,7 +2050,7 @@ def mostrar_comparacao_quatro_documentos(dados_docs):
         elif ausentes:
             status = "🟠 Parcial / campo ausente"
         else:
-            status = "🟢 Coincide nos quatro"
+            status = f"🟢 Coincide nos {len(dados_docs)} documentos informados"
         linha = {"Campo": titulo}
         linha.update({nome: (valores[nome] or "— Não informado —") for nome in dados_docs})
         linha["Resultado"] = status
@@ -2074,14 +2074,14 @@ def mostrar_cnaes_quatro(dados_docs):
         for nome, dados in dados_docs.items():
             linha[nome] = "✅" if cnae in dados.get("cnaes", []) else "—"
         presentes = sum(cnae in d.get("cnaes", []) for d in dados_docs.values())
-        linha["Resultado"] = "🟢 Nos quatro" if presentes == len(dados_docs) else f"🟠 Em {presentes}/4 documento(s)"
+        linha["Resultado"] = f"🟢 Em todos os {len(dados_docs)} informados" if presentes == len(dados_docs) else f"🟠 Em {presentes}/{len(dados_docs)} documento(s)"
         linhas.append(linha)
     st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
     conjuntos = {nome: set(d.get("cnaes", [])) for nome, d in dados_docs.items()}
     base = next(iter(conjuntos.values()))
     iguais = all(s == base for s in conjuntos.values())
     if iguais:
-        st.success("Os CNAEs extraídos coincidem entre os quatro documentos.")
+        st.success(f"Os CNAEs extraídos coincidem entre os {len(dados_docs)} documentos informados.")
     else:
         st.warning("Há diferenças nas listas de CNAEs. Verifique a tabela acima; a extração automática depende do formato do texto copiado.")
 
@@ -2109,11 +2109,11 @@ def mostrar_socios_quatro(dados_docs):
             linha[nome_doc] = socio.get("nome", "—") if socio else "—"
             if socio:
                 docs_presentes.append(nome_doc)
-        linha["Resultado"] = "🟢 Nos quatro" if len(docs_presentes) == len(dados_docs) else f"🟠 Presente em {len(docs_presentes)}/4"
+        linha["Resultado"] = f"🟢 Presente em todos os {len(dados_docs)} informados" if len(docs_presentes) == len(dados_docs) else f"🟠 Presente em {len(docs_presentes)}/{len(dados_docs)}"
         linhas.append(linha)
     st.dataframe(pd.DataFrame(linhas), use_container_width=True, hide_index=True)
     if all(all(any(normalizar_sem_acentos(s.get("nome", "")) == chave for s in d.get("socios", [])) for d in dados_docs.values()) for chave in nomes):
-        st.success("Todos os nomes de sócios identificados aparecem nos quatro documentos.")
+        st.success(f"Todos os nomes de sócios identificados aparecem nos {len(dados_docs)} documentos informados.")
     else:
         st.warning("Há sócios identificados em apenas parte dos documentos. Verifique se cada fonte contém o quadro societário.")
 
@@ -2122,8 +2122,8 @@ def mostrar_socios_quatro(dados_docs):
 # INTERFACE UNIFICADA — QUATRO DOCUMENTOS
 # ============================================================
 
-st.title("🔎 Verifica preenchimento — comparação de quatro documentos")
-st.write("Cole o texto completo de cada fonte. A análise compara simultaneamente Aprova Digital, CNPJ, Cadastro Municipal e Legalização.")
+st.title("🔎 Verifica preenchimento — comparação de documentos")
+st.write("Cole os documentos que deseja comparar. É possível analisar a partir de dois documentos; os campos vazios serão ignorados.")
 
 if "texto_aprova" not in st.session_state:
     st.session_state["texto_aprova"] = ""
@@ -2156,7 +2156,7 @@ def limpar_todos_campos():
 
 b1, b2, _ = st.columns([1, 1, 4])
 with b1:
-    analisar = st.button("🔎 Comparar os quatro documentos", type="primary", use_container_width=True)
+    analisar = st.button("🔎 Comparar documentos preenchidos", type="primary", use_container_width=True)
 with b2:
     st.button("🧹 Limpar", on_click=limpar_todos_campos, use_container_width=True)
 
@@ -2167,19 +2167,24 @@ if analisar:
         "Cadastro Municipal": st.session_state["texto_cadastro"],
         "Legalização": st.session_state["texto_legalizacao"],
     }
-    faltantes = [nome for nome, texto in textos.items() if not texto.strip()]
-    if faltantes:
-        st.warning("Preencha os quatro documentos antes de comparar. Faltam: " + ", ".join(faltantes) + ".")
+    textos_preenchidos = {nome: texto for nome, texto in textos.items() if texto.strip()}
+    if len(textos_preenchidos) < 2:
+        st.warning("Informe pelo menos dois documentos para realizar a comparação.")
     else:
-        dados_docs = {
-            "Aprova Digital": extrair_aprova_completo(textos["Aprova Digital"]),
-            "CNPJ": extrair_cnpj_documento(textos["CNPJ"]),
-            "Cadastro Municipal": extrair_cadastro_municipal(textos["Cadastro Municipal"]),
-            "Legalização": extrair_legalizacao(textos["Legalização"]),
+        extratores = {
+            "Aprova Digital": extrair_aprova_completo,
+            "CNPJ": extrair_cnpj_documento,
+            "Cadastro Municipal": extrair_cadastro_municipal,
+            "Legalização": extrair_legalizacao,
         }
+        dados_docs = {
+            nome: extratores[nome](texto)
+            for nome, texto in textos_preenchidos.items()
+        }
+        st.info(f"Análise realizada com {len(dados_docs)} documentos: " + ", ".join(dados_docs.keys()) + ".")
         st.divider()
         st.header("📋 Resumo dos dados identificados")
-        cols = st.columns(4)
+        cols = st.columns(len(dados_docs))
         for col, (nome, dados) in zip(cols, dados_docs.items()):
             with col:
                 st.markdown(f"**{nome}**")
@@ -2212,7 +2217,7 @@ if analisar:
         elif pendencias:
             st.warning("Não foram detectadas divergências entre os valores extraídos, mas há campos não identificados em alguma fonte: " + ", ".join(pendencias) + ".")
         else:
-            st.success("Os campos principais extraídos coincidem entre os quatro documentos. Confira também CNAEs, sócios e a tabela completa.")
+            st.success(f"Os campos principais extraídos coincidem entre os {len(dados_docs)} documentos informados. Confira também CNAEs, sócios e a tabela completa.")
         with st.expander("🛠️ Conferência técnica da extração"):
             for nome, dados in dados_docs.items():
                 st.markdown(f"**{nome}**")
