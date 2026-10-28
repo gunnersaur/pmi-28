@@ -1847,6 +1847,22 @@ def extrair_cnaes_generico(texto):
     """Extrai CNAEs de formatos comuns, retornando códigos de 7 dígitos."""
     if not texto:
         return []
+
+    # No Documento 1 (Aprova Digital), limitar a busca ao bloco iniciado
+    # pelo campo da inscrição imobiliária e encerrado em REGIN (Deferido).
+    inicio = re.search(
+        r"Insira a Inscri[cç][aã]o Imobili[aá]ria com os pontos\s*1[º°o]?\s*PARTE",
+        texto,
+        flags=re.IGNORECASE,
+    )
+    fim = re.search(r"REGIN\s*\(\s*Deferido\s*\)", texto, flags=re.IGNORECASE)
+    if inicio and fim and fim.start() >= inicio.start():
+        texto = texto[inicio.start():fim.end()]
+    else:
+        # Sem os dois marcadores, não varrer o documento inteiro: isso evita
+        # interpretar números de inscrição, endereço ou protocolo como CNAEs.
+        return []
+
     encontrados = []
     # formatos 00.00-0/00, 00.00-0-00 e 0000000
     for m in re.finditer(r'(?<!\d)(\d{2})[.]?(\d{2})[-.]?(\d)[/-]?(\d{2})(?!\d)', texto):
