@@ -1309,7 +1309,7 @@ def extrair_legalizacao(
     # --------------------------------------------------------
 
     match = re.search(
-        r"(?im)^\\s*Complemento\\s*:\\s*(.*?)(?=\\s+(?:Referência|Bairro|Município|Estado|CEP)\\s*:|[\\r\\n]|$)",
+        r"(?im)^\s*Complemento\s*:\s*([^\r\n|]*?)(?=\s+(?:Referência|Bairro|Município|Estado|CEP)\s*:|[\r\n]|$)",
         texto
     )
 
