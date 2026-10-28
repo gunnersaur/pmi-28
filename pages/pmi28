@@ -1,0 +1,208 @@
+import re
+import unicodedata
+
+
+CPF_REGEX = r"\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+
+QUALIFICACOES = (
+    "SOCIO-ADMINISTRADOR",
+    "SÓCIO-ADMINISTRADOR",
+    "SOCIO ADMINISTRADOR",
+    "SÓCIO ADMINISTRADOR",
+    "ADMINISTRADOR",
+    "SOCIO",
+    "SÓCIO",
+    "RESPONSAVEL",
+    "RESPONSÁVEL",
+)
+
+
+def normalizar_texto_socio(texto):
+    """Padroniza texto para comparação, sem alterar a exibição original."""
+    texto = (texto or "").strip().upper()
+    texto = unicodedata.normalize("NFKD", texto)
+    texto = "".join(
+        c for c in texto
+        if not unicodedata.combining(c)
+    )
+    texto = re.sub(r"\s+", " ", texto)
+    return texto.strip()
+
+
+def normalizar_cpf(cpf):
+    """Mantém somente os dígitos do CPF."""
+    return re.sub(r"\D", "", cpf or "")
+
+
+def extrair_registros_societarios(texto, documento):
+    """
+    Extrai CPF, nome e qualificação das seções societárias.
+
+    documento:
+      - 'cadastro': seções Sócios e Responsáveis
+      - 'legalizacao': seção Quadro Societário
+    """
+    if not texto:
+        return []
+
+    linhas = texto.replace("\r", "\n").split("\n")
+    registros = []
+    secoes_validas = (
+        {"sócios", "socios", "responsáveis", "responsaveis"}
+        if documento == "cadastro"
+        else {"quadro societário", "quadro societario"}
+    )
+
+    secao_ativa = False
+
+    for linha in linhas:
+        original = linha.strip()
+        if not original:
+            continue
+
+        linha_norm = normalizar_texto_socio(original)
+
+        # Identifica o início e o fim das seções relevantes.
+        if documento == "cadastro":
+            if linha_norm in {"SOCIOS", "RESPONSAVEIS"}:
+                secao_ativa = True
+                continue
+
+            if secao_ativa and re.search(
+                r"ATIVIDADE ECONOMICA CNAE|IDENTIFICACAO DO CONTRIBUINTE",
+                linha_norm
+            ):
+                secao_ativa = False
+                continue
+
+        else:
+            if linha_norm == "QUADRO SOCIETARIO":
+                secao_ativa = True
+                continue
+
+            if secao_ativa and linha_norm.startswith(
+                ("OBJETO SOCIAL", "OUTRAS INSTITUICOES",
+                 "INFORMACOES COMPLEMENTARES")
+            ):
+                secao_ativa = False
+                continue
+
+        if not secao_ativa:
+            continue
+
+        # Localiza o CPF no registro.
+        match_cpf = re.search(CPF_REGEX, original)
+        if not match_cpf:
+            continue
+
+        cpf = normalizar_cpf(match_cpf.group())
+        restante = original[match_cpf.end():].strip()
+
+        # Remove separadores de tabela.
+        restante = restante.strip("| \t")
+
+        # Retira a qualificação do final da linha, quando identificável.
+        qualificacao = ""
+        for qual in sorted(QUALIFICACOES, key=len, reverse=True):
+            padrao = re.compile(
+                re.escape(qual).replace(r"\-", r"[- ]"),
+                re.IGNORECASE
+            )
+            match_qual = padrao.search(restante)
+            if match_qual:
+                qualificacao = match_qual.group().strip()
+                restante = restante[:match_qual.start()].strip()
+                break
+
+        # No Cadastro Municipal, pode existir participação percentual
+        # entre o nome e a qualificação (ex.: nome + 100 + qualificação).
+        restante = re.sub(
+            r"\s+\d{1,3}(?:[,.]\d+)?\s*$",
+            "",
+            restante
+        ).strip()
+
+        nome = re.sub(r"^[|;\-\s]+|[|;\-\s]+$", "", restante)
+        nome = re.sub(r"\s+", " ", nome).strip()
+
+        # Evita registrar cabeçalhos ou linhas incompletas.
+        if len(nome.split()) < 2:
+            continue
+
+        registros.append({
+            "cpf": cpf,
+            "nome": nome,
+            "nome_normalizado": normalizar_texto_socio(nome),
+            "qualificacao": qualificacao,
+        })
+
+    return registros
+
+
+def comparar_socios_documentos(texto_cadastro, texto_legalizacao):
+    cadastro = extrair_registros_societarios(
+        texto_cadastro, "cadastro"
+    )
+    legalizacao = extrair_registros_societarios(
+        texto_legalizacao, "legalizacao"
+    )
+
+    # Deduplica o mesmo CPF dentro de cada documento.
+    # Isso evita contar duas vezes quem aparece em Sócios e Responsáveis.
+    def deduplicar(registros):
+        resultado = {}
+        sem_cpf = []
+
+        for registro in registros:
+            cpf = registro["cpf"]
+
+            if cpf:
+                if cpf not in resultado:
+                    resultado[cpf] = registro
+            else:
+                sem_cpf.append(registro)
+
+        return resultado, sem_cpf
+
+    cad_por_cpf, cad_sem_cpf = deduplicar(cadastro)
+    leg_por_cpf, leg_sem_cpf = deduplicar(legalizacao)
+
+    correspondentes = []
+    divergencias_nome = []
+    somente_cadastro = []
+    somente_legalizacao = []
+
+    # CPF igual: mesma pessoa identificada; comparar o nome.
+    for cpf in cad_por_cpf.keys() & leg_por_cpf.keys():
+        c = cad_por_cpf[cpf]
+        l = leg_por_cpf[cpf]
+
+        item = {
+            "cpf": cpf,
+            "nome_cadastro": c["nome"],
+            "nome_legalizacao": l["nome"],
+            "qualificacao_cadastro": c["qualificacao"],
+            "qualificacao_legalizacao": l["qualificacao"],
+        }
+
+        if c["nome_normalizado"] == l["nome_normalizado"]:
+            correspondentes.append(item)
+        else:
+            divergencias_nome.append(item)
+
+    for cpf in cad_por_cpf.keys() - leg_por_cpf.keys():
+        somente_cadastro.append(cad_por_cpf[cpf])
+
+    for cpf in leg_por_cpf.keys() - cad_por_cpf.keys():
+        somente_legalizacao.append(leg_por_cpf[cpf])
+
+    return {
+        "cadastro": list(cad_por_cpf.values()),
+        "legalizacao": list(leg_por_cpf.values()),
+        "correspondentes": correspondentes,
+        "divergencias_nome": divergencias_nome,
+        "somente_cadastro": somente_cadastro,
+        "somente_legalizacao": somente_legalizacao,
+        "cadastro_sem_cpf": cad_sem_cpf,
+        "legalizacao_sem_cpf": leg_sem_cpf,
+    }

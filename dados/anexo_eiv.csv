@@ -1,0 +1,558 @@
+ITEM,USO/ ATIVIDADE,ZONEAMENTO,Ac > (m²),At > (m²),UH,OBSERVAÇÃO
+1.1,Residencial Multifamiliar,ZR 1,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Residencial Multifamiliar,ZR 2,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Residencial Multifamiliar,ZR 3,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Residencial Multifamiliar,ZEA,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Uso Misto,ZR 1,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Uso Misto,ZR 2,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Uso Misto,ZR 3,10000,,100,Deve atender pelo menos um dos requisitos
+1.1,Uso Misto,ZEA,10000,,100,Deve atender pelo menos um dos requisitos
+1.2,Residencial Multifamiliar (Caixa da via < 8m),ZR 1,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Residencial Multifamiliar (Caixa da via < 8m),ZR 2,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Residencial Multifamiliar (Caixa da via < 8m),ZR 3,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Residencial Multifamiliar (Caixa da via < 8m),ZEA,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Uso Misto (Caixa da via < 8m),ZR 1,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Uso Misto (Caixa da via < 8m),ZR 2,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Uso Misto (Caixa da via < 8m),ZR 3,7500,,50,Deve atender pelo menos um dos requisitos
+1.2,Uso Misto (Caixa da via < 8m),ZEA,7500,,50,Deve atender pelo menos um dos requisitos
+1.3,Residencial Multifamiliar (Caixa da via < 6m),ZR 1,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Residencial Multifamiliar (Caixa da via < 6m),ZR 2,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Residencial Multifamiliar (Caixa da via < 6m),ZR 3,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Residencial Multifamiliar (Caixa da via < 6m),ZEA,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Uso Misto (Caixa da via < 6m),ZR 1,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Uso Misto (Caixa da via < 6m),ZR 2,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Uso Misto (Caixa da via < 6m),ZR 3,3000,,30,Deve atender pelo menos um dos requisitos
+1.3,Uso Misto (Caixa da via < 6m),ZEA,3000,,30,Deve atender pelo menos um dos requisitos
+1.4,Residencial Multifamiliar,ZPA 3,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZPA 1,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZTRU,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZPN,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZTRA,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZIP,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZU 4,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZPA 2,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZC 2,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZSI,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZAP,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZR 3,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZEU,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZR 2,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZIT,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZU 5,30000,,150,Deve atender simultâneamente ambas condições
+1.4,Residencial Multifamiliar,ZC 1,30000,,150,Deve atender simultâneamente ambas condições
+2.2,Comércio e serviços,ZU 3,30000,,,-
+2.2,Comércio e serviços,ZPA 3,30000,,,-
+2.1,Comércio e serviços,ZR 1,7500,,,-
+2.2,Comércio e serviços,ZPA 1,30000,,,-
+2.2,Comércio e serviços,ZTRU,30000,,,-
+2.2,Comércio e serviços,ZPN,30000,,,-
+2.2,Comércio e serviços,ZTRA,30000,,,-
+2.2,Comércio e serviços,ZIP,30000,,,-
+2.1,Comércio e serviços,ZEA,7500,,,-
+2.2,Comércio e serviços,ZU 4,30000,,,-
+2.2,Comércio e serviços,ZPA 2,30000,,,-
+2.2,Comércio e serviços,ZC 2,30000,,,-
+2.2,Comércio e serviços,ZU 2,30000,,,-
+2.2,Comércio e serviços,ZSI,30000,,,-
+2.2,Comércio e serviços,ZAP,30000,,,-
+2.1,Comércio e serviços,ZR 3,7500,,,-
+2.2,Comércio e serviços,ZEU,30000,,,-
+2.1,Comércio e serviços,ZR 2,7500,,,-
+2.2,Comércio e serviços,ZU 1,30000,,,-
+2.2,Comércio e serviços,ZIT,30000,,,-
+2.2,Comércio e serviços,ZR,30000,,,-
+2.2,Comércio e serviços,ZU 5,30000,,,-
+2.2,Comércio e serviços,ZC 1,30000,,,-
+4,Educacional,ZU 3,5000,,,-
+4,Educacional,ZPA 3,5000,,,-
+4,Educacional,ZR 1,5000,,,-
+4,Educacional,ZPA 1,5000,,,-
+4,Educacional,ZTRU,5000,,,-
+4,Educacional,ZPN,5000,,,-
+4,Educacional,ZTRA,5000,,,-
+4,Educacional,ZIP,5000,,,-
+4,Educacional,ZEA,5000,,,-
+4,Educacional,ZU 4,5000,,,-
+4,Educacional,ZPA 2,5000,,,-
+4,Educacional,ZC 2,5000,,,-
+4,Educacional,ZU 2,5000,,,-
+4,Educacional,ZSI,5000,,,-
+4,Educacional,ZAP,5000,,,-
+4,Educacional,ZR 3,5000,,,-
+4,Educacional,ZEU,5000,,,-
+4,Educacional,ZR 2,5000,,,-
+4,Educacional,ZU 1,5000,,,-
+4,Educacional,ZIT,5000,,,-
+4,Educacional,ZU 5,5000,,,-
+4,Educacional,ZC 1,5000,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZU 3,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZPA 3,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZR 1,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZPA 1,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZTRU,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZPN,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZTRA,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZIP,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZEA,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZU 4,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZPA 2,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZC 2,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZU 2,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZSI,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZAP,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZR 3,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZEU,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZR 2,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZU 1,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZIT,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZU 5,7500,,,-
+5,"Hospitais, clínicas, centros de zoonose e similares",ZC 1,7500,,,-
+6,Ginásios esportivos e estádios,ZU 3,10000,,,-
+6,Ginásios esportivos e estádios,ZPA 3,10000,,,-
+6,Ginásios esportivos e estádios,ZR 1,10000,,,-
+6,Ginásios esportivos e estádios,ZPA 1,10000,,,-
+6,Ginásios esportivos e estádios,ZTRU,10000,,,-
+6,Ginásios esportivos e estádios,ZPN,10000,,,-
+6,Ginásios esportivos e estádios,ZTRA,10000,,,-
+6,Ginásios esportivos e estádios,ZIP,10000,,,-
+6,Ginásios esportivos e estádios,ZEA,10000,,,-
+6,Ginásios esportivos e estádios,ZU 4,10000,,,-
+6,Ginásios esportivos e estádios,ZPA 2,10000,,,-
+6,Ginásios esportivos e estádios,ZC 2,10000,,,-
+6,Ginásios esportivos e estádios,ZU 2,10000,,,-
+6,Ginásios esportivos e estádios,ZSI,10000,,,-
+6,Ginásios esportivos e estádios,ZAP,10000,,,-
+6,Ginásios esportivos e estádios,ZR 3,10000,,,-
+6,Ginásios esportivos e estádios,ZEU,10000,,,-
+6,Ginásios esportivos e estádios,ZR 2,10000,,,-
+6,Ginásios esportivos e estádios,ZU 1,10000,,,-
+6,Ginásios esportivos e estádios,ZIT,10000,,,-
+6,Ginásios esportivos e estádios,ZU 5,10000,,,-
+6,Ginásios esportivos e estádios,ZC 1,10000,,,-
+7,Postos de combustível,ZU 3,5000,,,-
+7,Postos de combustível,ZPA 3,5000,,,-
+7,Postos de combustível,ZR 1,5000,,,-
+7,Postos de combustível,ZPA 1,5000,,,-
+7,Postos de combustível,ZTRU,5000,,,-
+7,Postos de combustível,ZPN,5000,,,-
+7,Postos de combustível,ZTRA,5000,,,-
+7,Postos de combustível,ZIP,5000,,,-
+7,Postos de combustível,ZEA,5000,,,-
+7,Postos de combustível,ZU 4,5000,,,-
+7,Postos de combustível,ZPA 2,5000,,,-
+7,Postos de combustível,ZC 2,5000,,,-
+7,Postos de combustível,ZU 2,5000,,,-
+7,Postos de combustível,ZSI,5000,,,-
+7,Postos de combustível,ZAP,5000,,,-
+7,Postos de combustível,ZR 3,5000,,,-
+7,Postos de combustível,ZEU,5000,,,-
+7,Postos de combustível,ZR 2,5000,,,-
+7,Postos de combustível,ZU 1,5000,,,-
+7,Postos de combustível,ZIT,5000,,,-
+7,Postos de combustível,ZU 5,5000,,,-
+7,Postos de combustível,ZC 1,5000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZU 3,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZPA 3,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZR 1,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZPA 1,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZTRU,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZPN,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZTRA,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZIP,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZEA,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZU 4,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZPA 2,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZC 2,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZU 2,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZSI,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZAP,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZR 3,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZEU,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZR 2,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZU 1,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZIT,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZU 5,1000,,,-
+8,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",ZC 1,1000,,,-
+3.1,Industrial,ZSI,30000,,,"Área construída maior para ZSI, ZPN, ZAP e ZPI em relação as demais zonas"
+3.1,Industrial,ZPN,30000,,,"Área construída maior para ZSI, ZPN, ZAP e ZPI em relação as demais zonas"
+3.1,Industrial,ZAP,30000,,,"Área construída maior para ZSI, ZPN, ZAP e ZPI em relação as demais zonas"
+3.1,Industrial,ZIP,30000,,,"Área construída maior para ZSI, ZPN, ZAP e ZPI em relação as demais zonas"
+3.2,Industrial,ZU 3,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZPA 3,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZR 1,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZPA 1,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZTRU,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZTRA,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZEA,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZU 4,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZPA 2,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZC 2,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZU 2,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZR 3,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZEU,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZR 2,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZU 1,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZIT,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZU 5,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+3.2,Industrial,ZC 1,10000,,,"Área construída reduzida para 10.000m² para zonas diferentes de ZSI, ZPN, ZAP e ZPI."
+18,Loteamento,ZU 3,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZPA 3,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZR 1,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZPA 1,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZTRU,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZPN,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZTRA,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZIP,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZEA,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZU 4,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZPA 2,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZC 2,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZU 2,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZSI,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZAP,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZR 3,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZEU,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZR 2,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZU 1,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZIT,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZU 5,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+18,Loteamento,ZC 1,,,200,Para qualquer zoneamento deverá ter EIV acima de 200 unidades autônomas
+21,"Triagem, reciclagem, transbordo e aterro",ZU 3,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZPA 3,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZR 1,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZPA 1,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZTRU,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZPN,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZTRA,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZIP,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZEA,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZU 4,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZPA 2,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZC 2,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZU 2,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZSI,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZAP,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZR 3,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZEU,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZR 2,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZU 1,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZIT,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZU 5,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+21,"Triagem, reciclagem, transbordo e aterro",ZC 1,0,0,,"Deverá ter EIV para qualquer área ocupada, construída e localizada em qualquer zona."
+9,"Templos, igrejas, centros culturais e outros",ZU 3,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZPA 3,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZR 1,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZPA 1,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZTRU,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZPN,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZTRA,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZIP,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZEA,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZU 4,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZPA 2,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZC 2,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZU 2,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZSI,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZAP,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZR 3,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZEU,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZR 2,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZU 1,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZIT,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZU 5,7000,,,-
+9,"Templos, igrejas, centros culturais e outros",ZC 1,7000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZU 3,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZPA 3,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZR 1,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZPA 1,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZTRU,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZPN,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZTRA,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZIP,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZEA,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZU 4,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZPA 2,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZC 2,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZU 2,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZSI,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZAP,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZR 3,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZEU,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZR 2,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZU 1,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZIT,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZU 5,10000,,,-
+10,"Centro de convenções, eventos, pavilhões e feiras",ZC 1,10000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZU 3,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZPA 3,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZR 1,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZPA 1,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZTRU,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZPN,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZTRA,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZIP,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZEA,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZU 4,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZPA 2,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZC 2,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZU 2,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZSI,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZAP,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZR 3,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZEU,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZR 2,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZU 1,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZIT,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZU 5,15000,,,-
+11,"Clubes recreativos, de lazer, esportivo e similares",ZC 1,15000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZU 3,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZPA 3,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZR 1,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZPA 1,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZTRU,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZPN,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZTRA,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZIP,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZEA,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZU 4,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZPA 2,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZC 2,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZU 2,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZSI,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZAP,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZR 3,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZEU,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZR 2,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZU 1,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZIT,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZU 5,1000,,,-
+12,"Autódromo, kártódromo, hipódromo, aeródromo e similares",ZC 1,1000,,,-
+13.1,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZSI,30000,,,-
+13.1,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZPN,30000,,,-
+13.1,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZAP,30000,,,-
+13.1,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZIP,30000,,,-
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZU 3,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZPA 3,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZR 1,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZPA 1,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZTRU,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZTRA,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZEA,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZU 4,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZPA 2,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZC 2,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZU 2,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZR 3,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZEU,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZR 2,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZU 1,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZIT,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZU 5,7500,15000,,Deve atender pelo menos um dos requisitos
+13.2,"Depósito, armazéns, pátio de veículos, transportadoras e afins",ZC 1,7500,15000,,Deve atender pelo menos um dos requisitos
+14,"Terminais urbanos, interurbanos de qualquer modal",ZSI,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZPN,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZAP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZIP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZU 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZPA 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZR 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZPA 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZTRU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZTRA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZEA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZU 4,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZPA 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZC 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZU 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZR 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZEU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZR 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZU 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZIT,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZU 5,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+14,"Terminais urbanos, interurbanos de qualquer modal",ZC 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZSI,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZPN,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZAP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZIP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZU 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZPA 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZR 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZPA 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZTRU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZTRA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZEA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZU 4,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZPA 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZC 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZU 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZR 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZEU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZR 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZU 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZIT,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZU 5,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+15,Penitenciárias e presídios,ZC 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZSI,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZPN,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZAP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZIP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZU 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZPA 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZR 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZPA 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZTRU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZTRA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZEA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZU 4,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZPA 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZC 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZU 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZR 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZEU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZR 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZU 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZIT,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZU 5,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+16,Parques de diversão (Não itinerantes),ZC 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZU 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZPA 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZR 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZPA 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZTRU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZPN,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZTRA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZIP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZEA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZU 4,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZPA 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZC 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZU 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZSI,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZAP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZR 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZEU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZR 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZU 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZIT,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZU 5,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+19,Cemitério e crematório,ZC 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+17,Condomínio horizontal,ZU 3,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZPA 3,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZR 1,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZPA 1,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZTRU,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZPN,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZTRA,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZIP,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZEA,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZU 4,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZPA 2,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZC 2,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZU 2,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZSI,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZAP,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZR 3,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZEU,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZR 2,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZU 1,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZIT,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZU 5,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+17,Condomínio horizontal,ZC 1,,,150,"Deve ter EIV quando o condomínio tiver mais que 150 unidades habitacionais, independentemente da zona"
+20,Estação de tratamento de água e esgoto,ZU 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZPA 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZR 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZPA 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZTRU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZPN,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZTRA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZIP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZEA,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZU 4,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZPA 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZC 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZU 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZSI,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZAP,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZR 3,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZEU,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZR 2,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZU 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZIT,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZU 5,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+20,Estação de tratamento de água e esgoto,ZC 1,0,0,,Deve ter EIV para qualquer área em qualquer zoneamento
+23.1,"Portos, terminais portuários e portos secos",ZSI,30000,,,-
+23.1,"Portos, terminais portuários e portos secos",ZPN,30000,,,-
+23.1,"Portos, terminais portuários e portos secos",ZAP,30000,,,-
+23.1,"Portos, terminais portuários e portos secos",ZIP,30000,,,-
+23.2,"Portos, terminais portuários e portos secos",ZU 3,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZPA 3,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZR 1,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZPA 1,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZTRU,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZTRA,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZEA,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZU 4,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZPA 2,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZC 2,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZU 2,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZR 3,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZEU,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZR 2,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZU 1,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZIT,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZU 5,,5000,,-
+23.2,"Portos, terminais portuários e portos secos",ZC 1,,5000,,-
+23.1,Estaleiros ou marinas,ZSI,30000,,,-
+23.1,Estaleiros ou marinas,ZPN,30000,,,-
+23.1,Estaleiros ou marinas,ZAP,30000,,,-
+23.1,Estaleiros ou marinas,ZIP,30000,,,-
+23.1,Estaleiros ou marinas,ZU 3,,5000,,-
+23.1,Estaleiros ou marinas,ZPA 3,,5000,,-
+23.1,Estaleiros ou marinas,ZR 1,,5000,,-
+23.1,Estaleiros ou marinas,ZPA 1,,5000,,-
+23.1,Estaleiros ou marinas,ZTRU,,5000,,-
+23.1,Estaleiros ou marinas,ZTRA,,5000,,-
+23.1,Estaleiros ou marinas,ZEA,,5000,,-
+23.1,Estaleiros ou marinas,ZU 4,,5000,,-
+23.1,Estaleiros ou marinas,ZPA 2,,5000,,-
+23.1,Estaleiros ou marinas,ZC 2,,5000,,-
+23.1,Estaleiros ou marinas,ZU 2,,5000,,-
+23.1,Estaleiros ou marinas,ZR 3,,5000,,-
+23.1,Estaleiros ou marinas,ZEU,,5000,,-
+23.1,Estaleiros ou marinas,ZR 2,,5000,,-
+23.1,Estaleiros ou marinas,ZU 1,,5000,,-
+23.1,Estaleiros ou marinas,ZIT,,5000,,-
+23.1,Estaleiros ou marinas,ZU 5,,5000,,-
+23.1,Estaleiros ou marinas,ZC 1,,5000,,-
+,,,,,,
+,,,,,,
+,,,,,,
+,Residencial Multifamiliar,,,,,
+,Uso Misto,,,,,
+,Residencial Multifamiliar (Caixa da via < 8m),,,,,
+,Uso Misto (Caixa da via < 8m),,,,,
+,Residencial Multifamiliar (Caixa da via < 6m),,,,,
+,Uso Misto (Caixa da via < 6m),,,,,
+,Comércio e serviços,,,,,
+,Educacional,,,,,
+,"Hospitais, clínicas, centros de zoonose e similares",,,,,
+,Ginásios esportivos e estádios,,,,,
+,Postos de combustível,,,,,
+,"Restaurantes, bares, tabacarias, casas noturnas, casa de jogos e similares",,,,,
+,Industrial,,,,,
+,Loteamento,,,,,
+,"Triagem, reciclagem, transbordo e aterro",,,,,
+,"Templos, igrejas, centros culturais e outros",,,,,
+,"Centro de convenções, eventos, pavilhões e feiras",,,,,
+,"Clubes recreativos, de lazer, esportivo e similares",,,,,
+,"Autódromo, kártódromo, hipódromo, aeródromo e similares",,,,,
+,"Depósito, armazéns, pátio de veículos, transportadoras e afins",,,,,
+,"Terminais urbanos, interurbanos de qualquer modal",,,,,
+,Penitenciárias e presídios,,,,,
+,Parques de diversão (Não itinerantes),,,,,
+,Cemitério e crematório,,,,,
+,Condomínio horizontal,,,,,
+,Estação de tratamento de água e esgoto,,,,,
+,"Portos, terminais portuários e portos secos",,,,,
+,Estaleiros ou marinas,,,,,
