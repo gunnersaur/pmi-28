@@ -1844,33 +1844,49 @@ def primeiro_match(padroes, texto, flags=re.IGNORECASE | re.MULTILINE):
 
 
 def extrair_cnaes_generico(texto):
-    """Extrai CNAEs de formatos comuns, retornando códigos de 7 dígitos."""
+    """Extrai CNAEs em formatos comuns de documentos cadastrais."""
     if not texto:
         return []
 
-    # No Documento 1 (Aprova Digital), limitar a busca ao bloco iniciado
-    # pelo campo da inscrição imobiliária e encerrado em REGIN (Deferido).
-    inicio = re.search(
-        r"Insira a Inscri[cç][aã]o Imobili[aá]ria com os pontos\s*1[º°o]?\s*PARTE",
-        texto,
-        flags=re.IGNORECASE,
-    )
-    fim = re.search(r"REGIN\s*\(\s*Deferido\s*\)", texto, flags=re.IGNORECASE)
-    if inicio and fim and fim.start() >= inicio.start():
-        texto = texto[inicio.start():fim.end()]
-    else:
-        # Sem os dois marcadores, não varrer o documento inteiro: isso evita
-        # interpretar números de inscrição, endereço ou protocolo como CNAEs.
-        return []
-
     encontrados = []
-    # formatos 00.00-0/00, 00.00-0-00 e 0000000
+    # Formatos usuais: 00.00-0/00, 00.00-0-00 ou 0000000.
     for m in re.finditer(r'(?<!\d)(\d{2})[.]?(\d{2})[-.]?(\d)[/-]?(\d{2})(?!\d)', texto):
         codigo = "".join(m.groups())
         if codigo not in encontrados:
             encontrados.append(codigo)
-    # códigos tabulares sem pontuação; restringe às linhas com aparência de CNAE
     for linha in texto.splitlines():
+        m = re.match(r'\s*(\d{7})\s*(?:\||\s+-\s+|\s{2,})', linha)
+        if m and m.group(1) not in encontrados:
+            encontrados.append(m.group(1))
+    return encontrados
+
+
+def extrair_cnaes_aprova(texto):
+    """Extrai CNAEs do Documento 1 somente dentro do trecho definido do Aprova Digital."""
+    if not texto:
+        return []
+
+    # O trecho começa na pergunta sobre a solicitação e termina no status REGIN.
+    marcador_inicio = (
+        r"Qual\s+[ée]\s+sua\s+solicita[cç][aã]o\?"
+        r"\s*\(\s*Para\s+altera[cç][aã]o\s+de\s+[ÁA]rea\s+Ocupada"
+        r"\s+ou\s+Endere[cç]o,?\s*deve\s+ser\s+preenchido"
+        r"\s+todos\s+os\s+CNAES\s+existentes\s+que\s+ir[aã]o\s+permanecer\s*\)"
+    )
+    inicio = re.search(marcador_inicio, texto, flags=re.IGNORECASE | re.DOTALL)
+    fim = re.search(r"REGIN\s*\(\s*Deferido\s*\)", texto, flags=re.IGNORECASE)
+
+    # Não procurar em outras partes do documento se qualquer marcador estiver ausente.
+    if not inicio or not fim or fim.start() < inicio.start():
+        return []
+
+    trecho = texto[inicio.start():fim.end()]
+    encontrados = []
+    for m in re.finditer(r'(?<!\d)(\d{2})[.]?(\d{2})[-.]?(\d)[/-]?(\d{2})(?!\d)', trecho):
+        codigo = "".join(m.groups())
+        if codigo not in encontrados:
+            encontrados.append(codigo)
+    for linha in trecho.splitlines():
         m = re.match(r'\s*(\d{7})\s*(?:\||\s+-\s+|\s{2,})', linha)
         if m and m.group(1) not in encontrados:
             encontrados.append(m.group(1))
@@ -1889,7 +1905,7 @@ def extrair_aprova_completo(texto):
         "bairro": "",
         "complemento": "",
         "cep": "",
-        "cnaes": extrair_cnaes_generico(texto),
+        "cnaes": extrair_cnaes_aprova(texto),
         "socios": [],
     }
 
